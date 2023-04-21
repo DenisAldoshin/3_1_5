@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Show One</title>
+    <title>zalupa</title>
 </head>
 <body>
-<p th:text="${user.getUsername()+ ' '+ user.getLast_name()}">value</p>
-<p th:text="${user.getId()}">value</p>
-
+<br/>
+<p th:text="${user.toString()}">value</p>
 <a th:href="@{/User/{id}/edit(id=${user.getId()})}"></a>
-
 
 <br>
 <br>

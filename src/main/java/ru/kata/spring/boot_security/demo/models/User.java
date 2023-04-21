@@ -103,4 +103,12 @@ public class User implements UserDetails {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+    @Override
+    public String toString() {
+        return  "username='" + username + '\'' +
+                ", last_name='" + last_name + '\'' +
+                ", roles=" + roles +
+                '}';
+    }
 }
