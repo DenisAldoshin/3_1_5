@@ -72,17 +72,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void updateUser(User user) {
         user.setPassword(passwordEncoder().encode(user.getPassword()));
         userRepo.save(user);
     }
 
     @Override
+    @Transactional
     public void deleteUser(Long id) {
         userRepo.deleteById(id);
     }
 
     @Override
+    @Transactional
     public void addUser(User user) {
         user.setPassword(passwordEncoder().encode(user.getPassword()));
         userRepo.save(user);
