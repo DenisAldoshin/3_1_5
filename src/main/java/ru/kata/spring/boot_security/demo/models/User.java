@@ -1,7 +1,6 @@
 package ru.kata.spring.boot_security.demo.models;
 
 
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,7 +27,9 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
-    public User(){}
+
+    public User() {
+    }
 
     public User(String username, String last_name, String password, Set<Role> roles) {
         this.username = username;
@@ -106,9 +107,19 @@ public class User implements UserDetails {
 
     @Override
     public String toString() {
-        return  "username='" + username + '\'' +
+        return "username='" + username + '\'' +
                 ", last_name='" + last_name + '\'' +
                 ", roles=" + roles +
                 '}';
+    }
+
+    public String roleToString() {
+       StringBuilder strb = new StringBuilder();
+       for (Role role: roles){
+           strb.append(role.getRole());
+       }
+        if (strb.toString().equals("ROLE_ADMIN")) {
+            return "ADMIN";
+        }else return "USER";
     }
 }

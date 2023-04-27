@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping
+@RequestMapping("/user")
 public class UserController {
     private final UserService userService;
 
@@ -22,10 +22,9 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/user")
+    @GetMapping()
     public String showOne(Principal principal, Model model ) {
-        User user = userService.findByUsername(principal.getName());
-        model.addAttribute("user", user);
+        model.addAttribute("user", userService.findByUsername(principal.getName()));
         return "show";
     }
 
