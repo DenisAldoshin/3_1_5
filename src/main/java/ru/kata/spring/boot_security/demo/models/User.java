@@ -1,11 +1,13 @@
 package ru.kata.spring.boot_security.demo.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.*;
 
 @Entity
@@ -15,25 +17,26 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty(message = "Username should be not empty")
+    @Size(min = 2, max = 30, message = "Username should be between 2 and 30 characters")
+    @Column(name = "username")
     private String username;
-
-    private String last_name;
-
+    @NotEmpty(message = "Last name should be not empty")
+    @Size(min = 2, max = 30, message = "Last name should be between 2 and 30 characters")
+    @Column(name = "last_name")
+    private String lastName;
+    @Column(name = "password")
     private String password;
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
 
-    public User(String username, String last_name, String password, Set<Role> roles) {
+    public User(String username, String lastName, String password, Set<Role> roles) {
         this.username = username;
-        this.last_name = last_name;
+        this.lastName = lastName;
         this.password = password;
         this.roles = roles;
     }
@@ -75,15 +78,16 @@ public class User implements UserDetails {
         this.username = username;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
     }
@@ -107,19 +111,16 @@ public class User implements UserDetails {
 
     @Override
     public String toString() {
-        return "username='" + username + '\'' +
-                ", last_name='" + last_name + '\'' +
-                ", roles=" + roles +
-                '}';
+        return "username='" + username + '\'' + ", last_name='" + lastName + '\'' + ", roles=" + roles + '}';
     }
 
     public String roleToString() {
-       StringBuilder strb = new StringBuilder();
-       for (Role role: roles){
-           strb.append(role.getRole());
-       }
+        StringBuilder strb = new StringBuilder();
+        for (Role role : roles) {
+            strb.append(role.getRole());
+        }
         if (strb.toString().equals("ROLE_ADMIN")) {
             return "ADMIN";
-        }else return "USER";
+        } else return "USER";
     }
 }

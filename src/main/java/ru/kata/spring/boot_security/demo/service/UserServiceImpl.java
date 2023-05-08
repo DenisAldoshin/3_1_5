@@ -14,6 +14,7 @@ import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepo;
 import ru.kata.spring.boot_security.demo.repositories.UserRepo;
+import ru.kata.spring.boot_security.demo.util.PersonNotFoundException;
 
 import java.util.Collection;
 import java.util.List;
@@ -65,7 +66,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User findUserById(Long id) {
         Optional<User> user = userRepo.findById(id);
-        return user.orElse(new User());
+        return user.orElseThrow(PersonNotFoundException::new);
     }
 
     @Override
@@ -77,7 +78,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateUser(User user) {
-        user.setPassword(passwordEncoder().encode(user.getPassword()));
+//        user.setPassword(passwordEncoder().encode(user.getPassword()));
         userRepo.save(user);
     }
 
